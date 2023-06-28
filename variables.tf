@@ -2,12 +2,13 @@ variable "instance_type" {
 description = "Type of EC2 instance to provision"
 default     = "t3.nano"
 }
+
 variable = "ami_filter"{
 description = "Name filter and owner for AMI"
 
-    type = object ({
-    name = string
-   owner = string
+ type = object ({
+ name = string
+owner = string
   })
  default = {
     name = "bitnami-tomcat-*-x86_64-hvm-ebs-nami"
@@ -27,16 +28,11 @@ default = {
   }
 }
 
-ingress_rules      = ["http-80-tcp", "https-443-tcp"]
-ingress_cidr_blocks = [0.0.0.0/0]
-
-egress_rules      = ["all-all"]
-egress_cidr_blocks = [0.0.0.0/0]
+variable = "min_size"{
+description = "Minimum number of instances in the ASG"
+default  = 1
 }
-
-resource "aws_security_group" "blog" {
-name  = "blog"
-description = "Allow http and https in. Allow everything out"
-vpc_id = module.vpc.public_subnets[0]
-}
+variable = "max_size"{
+description = "Maximum number of instances in the ASG"
+default  = 2
 }
